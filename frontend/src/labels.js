@@ -10,6 +10,20 @@ export const 命运 = {
   quarantine: '隔离',
 }
 
+/** 批的可用口径：usable 可直接封；stale 陈旧（人工架构需确认）；expired 已作废 */
+export const 批可用 = {
+  usable: '可封印',
+  stale: '陈旧·可能沿用旧指纹',
+  expired: '已作废·须重跑对齐',
+  sealed: '已封印',
+}
+export const 批可用色 = { usable: 'usable', stale: 'stale', expired: 'expired', sealed: 'sealed' }
+
+export const 失效架构 = {
+  auto: '自动作废（装载即失效开放批）',
+  manual: '人工失效（装载仅提示陈旧）',
+}
+
 export function 标(map, key) {
   if (key == null || key === '') return '—'
   return map[key] || String(key)

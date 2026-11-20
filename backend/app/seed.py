@@ -42,7 +42,11 @@ CREATE TABLE IF NOT EXISTS reconcile_batches (
   matched_count INTEGER NOT NULL DEFAULT 0,
   variance_count INTEGER NOT NULL DEFAULT 0,
   fingerprint TEXT,
-  created_at TEXT NOT NULL
+  created_at TEXT NOT NULL,
+  source_loaded_at TEXT,
+  source_sig TEXT,
+  invalidated_at TEXT,
+  invalidated_reason TEXT
 );
 CREATE TABLE IF NOT EXISTS variances (
   variance_id TEXT PRIMARY KEY,
@@ -61,10 +65,32 @@ CREATE TABLE IF NOT EXISTS settings (
 """
 
 
+def _migrate(conn) -> None:
+    """老库补列：CREATE TABLE IF NOT EXISTS 不会给既有表加新列。"""
+    cols = {
+        r["name"]
+        for r in conn.execute("PRAGMA table_info(reconcile_batches)").fetchall()
+    }
+    additions = {
+        "source_loaded_at": "TEXT",
+        "source_sig": "TEXT",
+        "invalidated_at": "TEXT",
+        "invalidated_reason": "TEXT",
+    }
+    for name, decl in additions.items():
+        if name not in cols:
+            conn.execute(f"ALTER TABLE reconcile_batches ADD COLUMN {name} {decl}")
+    conn.execute(
+        "INSERT OR IGNORE INTO settings(key,value) VALUES ('batch_invalidation','auto')"
+    )
+    conn.commit()
+
+
 def seed_if_empty() -> None:
     conn = connect()
     try:
         conn.executescript(SCHEMA)
+        _migrate(conn)
         n = conn.execute("SELECT COUNT(*) AS c FROM meters").fetchone()["c"]
         if n:
             return

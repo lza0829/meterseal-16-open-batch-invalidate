@@ -16,3 +16,6 @@ data/
 # 本地环境
 .env
 .DS_Store
+
+# 前端自检产物
+frontend/tests/.ui-dist/

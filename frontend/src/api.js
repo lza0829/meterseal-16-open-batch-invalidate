@@ -25,6 +25,10 @@ export const api = {
   periods: () => req('/periods'),
   align: (period_id) => req('/align', { method: 'POST', body: JSON.stringify({ period_id }) }),
   batches: (periodId) => req('/batches' + (periodId ? `?period_id=${periodId}` : '')),
+  batchDetail: (id) => req(`/batches/${id}`),
+  invalidateBatch: (id, reason) => req(`/batches/${id}/invalidate`, {
+    method: 'POST', body: JSON.stringify({ reason: reason || 'manual' }),
+  }),
   variances: (q) => {
     const sp = new URLSearchParams(q || {})
     const s = sp.toString()

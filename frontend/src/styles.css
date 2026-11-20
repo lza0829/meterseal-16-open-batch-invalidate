@@ -210,3 +210,14 @@ button:disabled { opacity: 0.5; cursor: not-allowed; }
   .mast { grid-template-columns: 1fr; }
   .seal-mark { width: 52px; height: 52px; font-size: 1.6rem; }
 }
+
+/* 批可用性口径：陈旧必须醒目，不能与正常开放批同色 */
+.tag.stale { background: rgba(168, 90, 42, 0.2); color: #7a3e12; }
+.tag.expired { background: rgba(143, 47, 47, 0.16); color: var(--warn); }
+.tag.usable { background: rgba(47, 106, 79, 0.16); color: var(--moss); }
+.hint { color: var(--fade); font-size: 0.86rem; margin: 0.35rem 0; }
+.danger { color: var(--warn); font-weight: 600; }
+.stat.alarm { border-color: rgba(143, 47, 47, 0.45); background: linear-gradient(160deg, #fff6f2, #f3e2da); }
+.stat.alarm b { color: var(--warn); }
+label.check { flex-direction: row; align-items: center; gap: 0.45rem; color: var(--warn); font-size: 0.9rem; }
+button + button { margin-left: 0.35rem; }
